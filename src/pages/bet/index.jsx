@@ -1,9 +1,8 @@
 import React from "react";
-import {Box, Button, Typography, useTheme, useMediaQuery} from "@mui/material";
+import {Box, Button, useTheme, useMediaQuery} from "@mui/material";
 import FlexBetween from "component/custom/FlexBetween";
 import Header from "component/custom/Header";
 import {DataGrid} from "@mui/x-data-grid";
-import {FamilyRestroomRounded} from "@mui/icons-material";
 
 function Bet() {
     const theme = useTheme();
