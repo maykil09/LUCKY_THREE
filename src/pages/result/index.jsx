@@ -16,6 +16,7 @@ const onSubmit = (values, actions) => {
 function Result() {
     const theme = useTheme();
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
+    const isNonMobile = useMediaQuery("(min-width: 600px)");
 
     const formik = useFormik({
         initialValues: {
@@ -111,7 +112,7 @@ function Result() {
                     borderRadius="0.55rem">
                     <Box height="100%" width="100%">
                         <Typography
-                            variant="h2"
+                            variant={isNonMobile ? "h2" : "h3"}
                             color={theme.palette.secondary[100]}>
                             Result of 9pm draw
                         </Typography>
@@ -122,7 +123,7 @@ function Result() {
                             justifyContent="center"
                             alignItems="center">
                             <Typography
-                                variant="h2"
+                                variant={isNonMobile ? "h2" : "h3"}
                                 color={theme.palette.secondary[100]}
                                 fontWeight="bold">
                                 NO RESULT POSTED
