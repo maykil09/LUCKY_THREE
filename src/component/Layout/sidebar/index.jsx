@@ -54,7 +54,9 @@ function Sidebar({drawerWidth, isNonMobile, isSidebarOpen, setIsSidebarOpen}) {
 
     useEffect(() => {
         setActive(pathname.substring(1));
-        setIsSidebarOpen(isNonMobile);
+        if (!isNonMobile) {
+            setIsSidebarOpen(isNonMobile);
+        }
     }, [pathname]);
 
     return (

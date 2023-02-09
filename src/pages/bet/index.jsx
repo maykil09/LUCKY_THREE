@@ -1,13 +1,34 @@
-import React from "react";
+import React, {useState} from "react";
 import {Box, Button, useTheme, useMediaQuery} from "@mui/material";
 import FlexBetween from "component/custom/FlexBetween";
 import Header from "component/custom/Header";
 import {DataGrid} from "@mui/x-data-grid";
+import AddBet from "component/modal/AddBet";
+import {numberPickedSchema} from "helper/formik";
+import {useFormik} from "formik";
+
+const onSubmit = (values, actions) => {
+    console.log(values);
+    console.log("submitted");
+    actions.resetForm();
+};
 
 function Bet() {
     const theme = useTheme();
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
 
+    const formik = useFormik({
+        initialValues: {
+            number: ""
+        },
+        validationSchema: numberPickedSchema,
+        onSubmit
+    });
+
+    //States
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // table columns
     const columns = [
         {
             field: "_id",
@@ -26,7 +47,7 @@ function Bet() {
         },
         {
             field: "isRumbled",
-            headerName: "Rambolito",
+            headerName: "Rumble",
             flex: 0.5
         },
         {
@@ -49,10 +70,16 @@ function Bet() {
                             fontSize: "14px",
                             fontWeight: "bold",
                             padding: "5px 10px"
-                        }}>
+                        }}
+                        onClick={() => setIsModalOpen(true)}>
                         {" "}
                         PLACE BET
                     </Button>
+                    <AddBet
+                        isModalOpen={isModalOpen}
+                        setIsModalOpen={setIsModalOpen}
+                        formik={formik}
+                    />
                 </Box>
             </FlexBetween>
             <Box

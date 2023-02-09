@@ -37,23 +37,8 @@ function Logs() {
 
     return (
         <Box m="1.5rem 2.5rem" pb="1.5rem">
-            <FlexBetween>
-                <Header title="LOGS" subtitle="List of User Activity" />
-                <Box>
-                    <Button
-                        variant="contained"
-                        sx={{
-                            backgroundColor: theme.palette.secondary.light,
-                            color: theme.palette.background.alt,
-                            fontSize: "14px",
-                            fontWeight: "bold",
-                            padding: "5px 10px"
-                        }}>
-                        {" "}
-                        Post Result
-                    </Button>
-                </Box>
-            </FlexBetween>
+            <Header title="LOGS" subtitle="List of User Activity" />
+
             <Box
                 mt="20px"
                 display="grid"

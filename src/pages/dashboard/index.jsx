@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import FlexBetween from "component/custom/FlexBetween";
 import Header from "component/custom/Header";
 import {Box, Button, Typography, useTheme, useMediaQuery} from "@mui/material";
@@ -10,11 +10,32 @@ import {
 } from "@mui/icons-material";
 import Statbox from "component/custom/Statbox";
 import {DataGrid} from "@mui/x-data-grid";
+import AddResult from "component/modal/AddResult";
+import {resultSchema} from "helper/formik";
+import {useFormik} from "formik";
+
+const onSubmit = (values, actions) => {
+    console.log(values);
+    console.log("submitted");
+    actions.resetForm();
+};
 
 function Dashboard() {
     const theme = useTheme();
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
 
+    const formik = useFormik({
+        initialValues: {
+            result: ""
+        },
+        validationSchema: resultSchema,
+        onSubmit
+    });
+
+    //States
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // table columns
     const columns = [
         {
             field: "bet_id",
@@ -28,7 +49,7 @@ function Dashboard() {
         },
         {
             field: "isRumbled",
-            headerName: "Rambolito",
+            headerName: "Rumble",
             flex: 0.5
         }
     ];
@@ -48,10 +69,16 @@ function Dashboard() {
                             fontSize: "14px",
                             fontWeight: "bold",
                             padding: "10px 20px"
-                        }}>
+                        }}
+                        onClick={() => setIsModalOpen(true)}>
                         {" "}
                         Post Result
                     </Button>
+                    <AddResult
+                        isModalOpen={isModalOpen}
+                        setIsModalOpen={setIsModalOpen}
+                        formik={formik}
+                    />
                 </Box>
             </FlexBetween>
             <Box

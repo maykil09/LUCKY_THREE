@@ -1,13 +1,37 @@
-import React from "react";
+import React, {useState} from "react";
 import FlexBetween from "component/custom/FlexBetween";
 import Header from "component/custom/Header";
 import {Box, Button, useTheme, useMediaQuery} from "@mui/material";
 import {DataGrid} from "@mui/x-data-grid";
+import AddAgentModal from "component/modal/AddAgentModal";
+import {useFormik} from "formik";
+import {agentSchema} from "helper/formik";
+
+const onSubmit = (values, actions) => {
+    console.log(values);
+    console.log("submitted");
+    actions.resetForm();
+};
 
 function Agent() {
     const theme = useTheme();
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
 
+    const formik = useFormik({
+        initialValues: {
+            firstName: "",
+            lastName: "",
+            username: "",
+            password: ""
+        },
+        validationSchema: agentSchema,
+        onSubmit
+    });
+
+    // States
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // table columns
     const columns = [
         {
             field: "_id",
@@ -32,25 +56,28 @@ function Agent() {
                 return params.value ? "Active" : "Disabled";
             }
         },
-
         {
             field: "actions",
             headerName: "Action",
             sortable: false,
-            type: "actions",
             flex: 0.5,
             renderCell: (params) => {
-                console.log(params);
                 return (
                     <FlexBetween gap="0.5rem">
                         <Button
                             variant="outlined"
-                            sx={{color: theme.palette.secondary.light}}>
+                            sx={{
+                                color: theme.palette.secondary.light,
+                                borderColor: theme.palette.secondary.light
+                            }}>
                             {params.row.userStatus ? "Disable" : "Activate"}
                         </Button>
                         <Button
                             variant="outlined"
-                            sx={{color: theme.palette.secondary.light}}>
+                            sx={{
+                                color: theme.palette.secondary.light,
+                                borderColor: theme.palette.secondary.light
+                            }}>
                             Place Bet
                         </Button>
                     </FlexBetween>
@@ -58,7 +85,6 @@ function Agent() {
             }
         }
     ];
-
     return (
         <Box m="1.5rem 2.5rem" pb="1.5rem">
             <FlexBetween>
@@ -72,10 +98,16 @@ function Agent() {
                             fontSize: "14px",
                             fontWeight: "bold",
                             padding: "5px 10px"
-                        }}>
+                        }}
+                        onClick={() => setIsModalOpen(true)}>
                         {" "}
                         Add Agent
                     </Button>
+                    <AddAgentModal
+                        isModalOpen={isModalOpen}
+                        setIsModalOpen={setIsModalOpen}
+                        formik={formik}
+                    />
                 </Box>
             </FlexBetween>
             <Box
