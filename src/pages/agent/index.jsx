@@ -1,13 +1,25 @@
 import React, {useState} from "react";
 import FlexBetween from "component/custom/FlexBetween";
 import Header from "component/custom/Header";
-import {Box, Button, useTheme, useMediaQuery} from "@mui/material";
+import {Box, Button, IconButton, useTheme, useMediaQuery} from "@mui/material";
+import {
+    PersonOffOutlined,
+    PersonAddOutlined,
+    AddCircleOutline
+} from "@mui/icons-material";
 import {DataGrid} from "@mui/x-data-grid";
 import AddAgentModal from "component/modal/AddAgentModal";
+import AddBet from "component/modal/AddBet";
 import {useFormik} from "formik";
-import {agentSchema} from "helper/formik";
+import {agentSchema, numberPickedSchema} from "helper/formik";
 
-const onSubmit = (values, actions) => {
+const addNewAgent = (values, actions) => {
+    console.log(values);
+    console.log("submitted");
+    actions.resetForm();
+};
+
+const placeBet = (values, actions) => {
     console.log(values);
     console.log("submitted");
     actions.resetForm();
@@ -16,8 +28,9 @@ const onSubmit = (values, actions) => {
 function Agent() {
     const theme = useTheme();
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
+    const isNonMobile = useMediaQuery("(min-width: 600px)");
 
-    const formik = useFormik({
+    const agentFormik = useFormik({
         initialValues: {
             firstName: "",
             lastName: "",
@@ -25,18 +38,28 @@ function Agent() {
             password: ""
         },
         validationSchema: agentSchema,
-        onSubmit
+        onSubmit: addNewAgent
+    });
+
+    const betFormik = useFormik({
+        initialValues: {
+            number: ""
+        },
+        validationSchema: numberPickedSchema,
+        onSubmit: placeBet
     });
 
     // States
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAgentModalOpen, setIsAgentModalOpen] = useState(false);
+    const [isBetModalOpen, setIsBetModalOpen] = useState(false);
 
     // table columns
     const columns = [
         {
             field: "_id",
             headerName: "ID",
-            flex: 0.5
+            flex: 0.5,
+            hide: !isNonMobile
         },
         {
             field: "firstName",
@@ -46,7 +69,8 @@ function Agent() {
         {
             field: "lastName",
             headerName: "Last Name",
-            flex: 0.5
+            flex: 0.5,
+            hide: !isNonMobile
         },
         {
             field: "userStatus",
@@ -63,23 +87,46 @@ function Agent() {
             flex: 0.5,
             renderCell: (params) => {
                 return (
-                    <FlexBetween gap="0.5rem">
-                        <Button
-                            variant="outlined"
-                            sx={{
-                                color: theme.palette.secondary.light,
-                                borderColor: theme.palette.secondary.light
-                            }}>
-                            {params.row.userStatus ? "Disable" : "Activate"}
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            sx={{
-                                color: theme.palette.secondary.light,
-                                borderColor: theme.palette.secondary.light
-                            }}>
-                            Place Bet
-                        </Button>
+                    <FlexBetween gap=".5rem">
+                        {isNonMobile ? (
+                            <>
+                                <Button
+                                    variant="outlined"
+                                    sx={{
+                                        color: theme.palette.secondary.light,
+                                        borderColor:
+                                            theme.palette.secondary.light
+                                    }}>
+                                    {params.row.userStatus
+                                        ? "Disable"
+                                        : "Activate"}
+                                </Button>
+                                <Button
+                                    variant="outlined"
+                                    sx={{
+                                        color: theme.palette.secondary.light,
+                                        borderColor:
+                                            theme.palette.secondary.light
+                                    }}
+                                    onClick={() => setIsBetModalOpen(true)}>
+                                    Place Bet
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <IconButton>
+                                    {params.row.userStatus ? (
+                                        <PersonOffOutlined />
+                                    ) : (
+                                        <PersonAddOutlined />
+                                    )}
+                                </IconButton>
+                                <IconButton
+                                    onClick={() => setIsBetModalOpen(true)}>
+                                    <AddCircleOutline />
+                                </IconButton>
+                            </>
+                        )}
                     </FlexBetween>
                 );
             }
@@ -99,14 +146,19 @@ function Agent() {
                             fontWeight: "bold",
                             padding: "5px 10px"
                         }}
-                        onClick={() => setIsModalOpen(true)}>
+                        onClick={() => setIsAgentModalOpen(true)}>
                         {" "}
                         Add Agent
                     </Button>
                     <AddAgentModal
-                        isModalOpen={isModalOpen}
-                        setIsModalOpen={setIsModalOpen}
-                        formik={formik}
+                        isModalOpen={isAgentModalOpen}
+                        setIsModalOpen={setIsAgentModalOpen}
+                        formik={agentFormik}
+                    />
+                    <AddBet
+                        isModalOpen={isBetModalOpen}
+                        setIsModalOpen={setIsBetModalOpen}
+                        formik={betFormik}
                     />
                 </Box>
             </FlexBetween>
