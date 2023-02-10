@@ -1,39 +1,11 @@
 import React from "react";
-import FlexBetween from "component/custom/FlexBetween";
 import Header from "component/custom/Header";
-import {Box, Button, useTheme, useMediaQuery} from "@mui/material";
-import {DataGrid} from "@mui/x-data-grid";
+import {Box, useTheme, useMediaQuery} from "@mui/material";
+import LogsTable from "component/table/LogsTable";
 
 function Logs() {
     const theme = useTheme();
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
-
-    const columns = [
-        {
-            field: "_id",
-            headerName: "ID",
-            sortable: false,
-            flex: 0.5
-        },
-        {
-            field: "username",
-            headerName: "Username",
-            sortable: false,
-            flex: 0.5
-        },
-        {
-            field: "activity",
-            headerName: "Activity",
-            sortable: false,
-            flex: 0.5
-        },
-        {
-            field: "date",
-            headerName: "Date",
-            sortable: false,
-            flex: 0.5
-        }
-    ];
 
     return (
         <Box m="1.5rem 2.5rem" pb="1.5rem">
@@ -55,27 +27,13 @@ function Logs() {
                     gridRow="span 3"
                     backgroundColor={theme.palette.background.alt}
                     p="1rem"
-                    borderRadius="0.55rem">
-                    <DataGrid
-                        disableColumnMenu={true}
-                        loading={false}
-                        getRowId={(row) => row._id}
-                        rows={[
-                            {
-                                _id: "12312asx21",
-                                username: "john123",
-                                activity: "Logged in",
-                                date: "February 7, 2023 8:35 PM"
-                            },
-                            {
-                                _id: "12qwsd12",
-                                username: "john123",
-                                activity: "Place a bet",
-                                date: "February 7, 2023 8:37 PM"
-                            }
-                        ]}
-                        columns={columns}
-                    />
+                    borderRadius="0.55rem"
+                    sx={{
+                        "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                            color: `${theme.palette.secondary[200]} !important`
+                        }
+                    }}>
+                    <LogsTable />
                 </Box>
             </Box>
         </Box>

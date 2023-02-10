@@ -7,12 +7,6 @@ import AddResult from "component/modal/AddResult";
 import {resultSchema} from "helper/formik";
 import {useFormik} from "formik";
 
-const onSubmit = (values, actions) => {
-    console.log(values);
-    console.log("submitted");
-    actions.resetForm();
-};
-
 function Result() {
     const theme = useTheme();
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
@@ -23,7 +17,12 @@ function Result() {
             result: ""
         },
         validationSchema: resultSchema,
-        onSubmit
+        onSubmit: (values, actions) => {
+            console.log(values);
+            console.log("submitted");
+            setIsModalOpen(false);
+            actions.resetForm();
+        }
     });
 
     //States

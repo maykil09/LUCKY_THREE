@@ -2,16 +2,14 @@ import React, {useState} from "react";
 import {Box, Button, useTheme, useMediaQuery} from "@mui/material";
 import FlexBetween from "component/custom/FlexBetween";
 import Header from "component/custom/Header";
-import {DataGrid} from "@mui/x-data-grid";
 import AddBet from "component/modal/AddBet";
 import {numberPickedSchema} from "helper/formik";
 import {useFormik} from "formik";
 
-const onSubmit = (values, actions) => {
-    console.log(values);
-    console.log("submitted");
-    actions.resetForm();
-};
+import BetTable from "component/table/BetTable";
+import SuccessBet from "component/modal/SuccessBet";
+
+// const onSubmit = (values, actions) => {};
 
 function Bet() {
     const theme = useTheme();
@@ -22,40 +20,23 @@ function Bet() {
             number: ""
         },
         validationSchema: numberPickedSchema,
-        onSubmit
+        onSubmit: (values, actions) => {
+            console.log(values);
+            console.log("submitted");
+            setBet({numberPicked: values.number, id: "8jkasd13"});
+            setIsSuccess(true);
+            setIsModalOpen(false);
+            actions.resetForm();
+        }
     });
 
     //States
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    // table columns
-    const columns = [
-        {
-            field: "_id",
-            headerName: "ID",
-            flex: 0.5
-        },
-        {
-            field: "bet_id",
-            headerName: "Bet ID",
-            flex: 0.5
-        },
-        {
-            field: "bet_number",
-            headerName: "Number Picked",
-            flex: 0.5
-        },
-        {
-            field: "isRumbled",
-            headerName: "Rumble",
-            flex: 0.5
-        },
-        {
-            field: "agent",
-            headerName: "Agent Name",
-            flex: 0.5
-        }
-    ];
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [bet, setBet] = useState({
+        numberPicked: "",
+        id: ""
+    });
 
     return (
         <Box m="1.5rem 2.5rem" pb="1.5rem">
@@ -80,6 +61,11 @@ function Bet() {
                         setIsModalOpen={setIsModalOpen}
                         formik={formik}
                     />
+                    <SuccessBet
+                        isModalOpen={isSuccess}
+                        setIsModalOpen={setIsSuccess}
+                        bet={bet}
+                    />
                 </Box>
             </FlexBetween>
             <Box
@@ -98,28 +84,23 @@ function Bet() {
                     gridRow="span 3"
                     backgroundColor={theme.palette.background.alt}
                     p="1rem"
-                    borderRadius="0.55rem">
-                    <DataGrid
-                        loading={false}
-                        getRowId={(row) => row._id}
-                        rows={[
-                            {
-                                _id: "123md12e12",
-                                bet_id: "652asd123akka",
-                                bet_number: "235",
-                                isRumbled: false,
-                                agent: "John Doe"
-                            },
-                            {
-                                _id: "890345acd2112",
-                                bet_id: "1237823asd2",
-                                bet_number: "125",
-                                isRumbled: true,
-                                agent: "John Doe"
-                            }
-                        ]}
-                        columns={columns}
-                    />
+                    borderRadius="0.55rem"
+                    sx={{
+                        // "& .MuiDataGrid-columnHeaders": {
+                        //     backgroundColor: theme.palette.background.alt,
+                        //     color: theme.palette.secondary[100],
+                        //     borderBottom: "none"
+                        // },
+                        // "& .MuiDataGrid-footerContainer": {
+                        //     backgroundColor: theme.palette.background.alt,
+                        //     color: theme.palette.secondary[100],
+                        //     borderTop: "none"
+                        // },
+                        "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                            color: `${theme.palette.secondary[200]} !important`
+                        }
+                    }}>
+                    <BetTable />
                 </Box>
             </Box>
         </Box>

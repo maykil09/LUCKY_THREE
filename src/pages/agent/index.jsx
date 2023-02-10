@@ -1,25 +1,16 @@
 import React, {useState} from "react";
 import FlexBetween from "component/custom/FlexBetween";
 import Header from "component/custom/Header";
-import {Box, Button, IconButton, useTheme, useMediaQuery} from "@mui/material";
-import {
-    PersonOffOutlined,
-    PersonAddOutlined,
-    AddCircleOutline
-} from "@mui/icons-material";
-import {DataGrid} from "@mui/x-data-grid";
+import {Box, Button, useTheme, useMediaQuery} from "@mui/material";
+
 import AddAgentModal from "component/modal/AddAgentModal";
 import AddBet from "component/modal/AddBet";
 import {useFormik} from "formik";
 import {agentSchema, numberPickedSchema} from "helper/formik";
+import SuccessBet from "component/modal/SuccessBet";
+import AgentTable from "component/table/AgentTable";
 
 const addNewAgent = (values, actions) => {
-    console.log(values);
-    console.log("submitted");
-    actions.resetForm();
-};
-
-const placeBet = (values, actions) => {
     console.log(values);
     console.log("submitted");
     actions.resetForm();
@@ -28,7 +19,6 @@ const placeBet = (values, actions) => {
 function Agent() {
     const theme = useTheme();
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
-    const isNonMobile = useMediaQuery("(min-width: 600px)");
 
     const agentFormik = useFormik({
         initialValues: {
@@ -46,92 +36,25 @@ function Agent() {
             number: ""
         },
         validationSchema: numberPickedSchema,
-        onSubmit: placeBet
+        onSubmit: (values, actions) => {
+            console.log(values);
+            console.log("submitted");
+            setBet({numberPicked: values.number, id: "8jkasd13"});
+            setIsSuccessModal(true);
+            setIsBetModalOpen(false);
+            actions.resetForm();
+        }
     });
 
     // States
     const [isAgentModalOpen, setIsAgentModalOpen] = useState(false);
     const [isBetModalOpen, setIsBetModalOpen] = useState(false);
+    const [isSuccessModal, setIsSuccessModal] = useState(false);
+    const [bet, setBet] = useState({
+        numberPicked: "",
+        id: ""
+    });
 
-    // table columns
-    const columns = [
-        {
-            field: "_id",
-            headerName: "ID",
-            flex: 0.5,
-            hide: !isNonMobile
-        },
-        {
-            field: "firstName",
-            headerName: "First Name",
-            flex: 0.5
-        },
-        {
-            field: "lastName",
-            headerName: "Last Name",
-            flex: 0.5,
-            hide: !isNonMobile
-        },
-        {
-            field: "userStatus",
-            headerName: "Status",
-            flex: 0.5,
-            renderCell: (params) => {
-                return params.value ? "Active" : "Disabled";
-            }
-        },
-        {
-            field: "actions",
-            headerName: "Action",
-            sortable: false,
-            flex: 0.5,
-            renderCell: (params) => {
-                return (
-                    <FlexBetween gap=".5rem">
-                        {isNonMobile ? (
-                            <>
-                                <Button
-                                    variant="outlined"
-                                    sx={{
-                                        color: theme.palette.secondary.light,
-                                        borderColor:
-                                            theme.palette.secondary.light
-                                    }}>
-                                    {params.row.userStatus
-                                        ? "Disable"
-                                        : "Activate"}
-                                </Button>
-                                <Button
-                                    variant="outlined"
-                                    sx={{
-                                        color: theme.palette.secondary.light,
-                                        borderColor:
-                                            theme.palette.secondary.light
-                                    }}
-                                    onClick={() => setIsBetModalOpen(true)}>
-                                    Place Bet
-                                </Button>
-                            </>
-                        ) : (
-                            <>
-                                <IconButton>
-                                    {params.row.userStatus ? (
-                                        <PersonOffOutlined />
-                                    ) : (
-                                        <PersonAddOutlined />
-                                    )}
-                                </IconButton>
-                                <IconButton
-                                    onClick={() => setIsBetModalOpen(true)}>
-                                    <AddCircleOutline />
-                                </IconButton>
-                            </>
-                        )}
-                    </FlexBetween>
-                );
-            }
-        }
-    ];
     return (
         <Box m="1.5rem 2.5rem" pb="1.5rem">
             <FlexBetween>
@@ -160,6 +83,11 @@ function Agent() {
                         setIsModalOpen={setIsBetModalOpen}
                         formik={betFormik}
                     />
+                    <SuccessBet
+                        isModalOpen={isSuccessModal}
+                        setIsModalOpen={setIsSuccessModal}
+                        bet={bet}
+                    />
                 </Box>
             </FlexBetween>
             <Box
@@ -178,20 +106,13 @@ function Agent() {
                     gridRow="span 3"
                     backgroundColor={theme.palette.background.alt}
                     p="1rem"
-                    borderRadius="0.55rem">
-                    <DataGrid
-                        loading={false}
-                        getRowId={(row) => row._id}
-                        rows={[
-                            {
-                                _id: "123123123",
-                                firstName: "John",
-                                lastName: "Doe",
-                                userStatus: true
-                            }
-                        ]}
-                        columns={columns}
-                    />
+                    borderRadius="0.55rem"
+                    sx={{
+                        "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                            color: `${theme.palette.secondary[200]} !important`
+                        }
+                    }}>
+                    <AgentTable setIsBetModalOpen={setIsBetModalOpen} />
                 </Box>
             </Box>
         </Box>

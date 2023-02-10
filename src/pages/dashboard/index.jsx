@@ -9,16 +9,11 @@ import {
     ShowChartOutlined
 } from "@mui/icons-material";
 import Statbox from "component/custom/Statbox";
-import {DataGrid} from "@mui/x-data-grid";
 import AddResult from "component/modal/AddResult";
 import {resultSchema} from "helper/formik";
 import {useFormik} from "formik";
-
-const onSubmit = (values, actions) => {
-    console.log(values);
-    console.log("submitted");
-    actions.resetForm();
-};
+import BetTable from "component/table/BetTable";
+import ChipsGiven from "component/table/ChipsGiven";
 
 function Dashboard() {
     const theme = useTheme();
@@ -29,30 +24,16 @@ function Dashboard() {
             result: ""
         },
         validationSchema: resultSchema,
-        onSubmit
+        onSubmit: (values, actions) => {
+            console.log(values);
+            console.log("submitted");
+            setIsModalOpen(false);
+            actions.resetForm();
+        }
     });
 
     //States
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    // table columns
-    const columns = [
-        {
-            field: "bet_id",
-            headerName: "Bet ID",
-            flex: 0.5
-        },
-        {
-            field: "bet_number",
-            headerName: "Number picked",
-            flex: 0.5
-        },
-        {
-            field: "isRumbled",
-            headerName: "Rumble",
-            flex: 0.5
-        }
-    ];
 
     return (
         <Box m="1.5rem 2.5rem" pb="1.5rem">
@@ -169,24 +150,21 @@ function Dashboard() {
 
                 {/* ROW 2 */}
                 <Box
-                    gridColumn="span 8"
+                    gridColumn="span 7"
                     gridRow="span 2"
                     backgroundColor={theme.palette.background.alt}
                     p="1rem"
                     borderRadius="0.55rem">
-                    <DataGrid
-                        loading={false}
-                        getRowId={(row) => row._id}
-                        rows={[]}
-                        columns={columns}
-                    />
+                    <BetTable isDashboard={true} />
                 </Box>
                 <Box
-                    gridColumn="span 4"
+                    gridColumn="span 5"
                     gridRow="span 2"
                     backgroundColor={theme.palette.background.alt}
                     p="1rem"
-                    borderRadius="0.55rem"></Box>
+                    borderRadius="0.55rem">
+                    <ChipsGiven isDashboard={true} />
+                </Box>
             </Box>
         </Box>
     );
