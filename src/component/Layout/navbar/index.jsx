@@ -86,7 +86,7 @@ function Navbar({isSidebarOpen, setIsSidebarOpen}) {
                         onClose={handleClose}
                         anchorOrigin={{
                             vertical: "bottom",
-                            horizontal: "bottom"
+                            horizontal: "left"
                         }}>
                         <MenuList>
                             <MenuItem onClick={handleLogout}>

@@ -54,11 +54,9 @@ function BetTable({isDashboard = false}) {
                 }
             ]}
             columns={columns}
-            components={
-                !isDashboard && {
-                    Toolbar: DataGridCustomToolbar
-                }
-            }
+            components={{
+                Toolbar: !isDashboard ? DataGridCustomToolbar : null
+            }}
         />
     );
 }
