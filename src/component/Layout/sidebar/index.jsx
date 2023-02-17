@@ -67,7 +67,7 @@ function Sidebar({drawerWidth, isNonMobile, isSidebarOpen, setIsSidebarOpen}) {
         if (!isNonMobile) {
             setIsSidebarOpen(isNonMobile);
         }
-    }, [pathname, isNonMobile, setIsSidebarOpen]);
+    }, [pathname, isNonMobile, setIsSidebarOpen, navigate, user.role]);
 
     return (
         <Box component="nav">

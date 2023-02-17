@@ -48,6 +48,7 @@ function Login() {
                         role: values.username
                     })
                 );
+                toast.success("Login Successful");
                 navigate("/dashboard");
             }
 
@@ -67,6 +68,7 @@ function Login() {
                         role: values.username
                     })
                 );
+                toast.success("Login Successful");
                 navigate("/dashboard");
             }
 

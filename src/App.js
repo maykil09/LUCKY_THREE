@@ -35,7 +35,7 @@ function App() {
         if (user) {
             dispatch(setUser(user));
         }
-    }, [user]);
+    }, [user, dispatch]);
 
     return (
         <div className="app">
