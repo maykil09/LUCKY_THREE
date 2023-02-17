@@ -2,10 +2,11 @@ import React from "react";
 import {Box, Typography, useTheme} from "@mui/material";
 import FlexBetween from "./FlexBetween";
 
-function Statbox({title, value, increase, icon, description}) {
+function Statbox({title, value, increase, icon, description, onClick = null}) {
     const theme = useTheme();
     return (
         <Box
+            onClick={onClick}
             gridColumn="span 2"
             gridRow="span 1"
             display="flex"
@@ -14,7 +15,10 @@ function Statbox({title, value, increase, icon, description}) {
             p="1.25rem 1rem"
             flex="1 1 100%"
             backgroundColor={theme.palette.background.alt}
-            borderRadius="0.55rem">
+            borderRadius="0.55rem"
+            sx={{
+                cursor: typeof onClick === "function" && "pointer"
+            }}>
             <FlexBetween>
                 <Typography
                     variant="h6"

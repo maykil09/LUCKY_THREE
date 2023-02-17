@@ -22,37 +22,47 @@ import {
 } from "@mui/icons-material";
 import {useLocation, useNavigate} from "react-router-dom";
 import FlexBetween from "component/custom/FlexBetween";
+import {useSelector} from "react-redux";
 
 const navItems = [
     {
         text: "Dashboard",
-        icon: <HomeOutlined />
+        icon: <HomeOutlined />,
+        permission: ["admin", "agent"]
     },
     {
         text: "Agent",
-        icon: <PeopleAltOutlined />
+        icon: <PeopleAltOutlined />,
+        permission: ["admin"]
     },
     {
         text: "Bet",
-        icon: <MonetizationOnOutlined />
+        icon: <MonetizationOnOutlined />,
+        permission: ["admin", "agent"]
     },
     {
         text: "Result",
-        icon: <EmojiEventsOutlined />
+        icon: <EmojiEventsOutlined />,
+        permission: ["admin", "agent"]
     },
     {
         text: "Logs",
-        icon: <FormatListBulletedOutlined />
+        icon: <FormatListBulletedOutlined />,
+        permission: ["admin", "agent"]
     }
 ];
 
 function Sidebar({drawerWidth, isNonMobile, isSidebarOpen, setIsSidebarOpen}) {
+    const user = useSelector((state) => state.global.user);
     const {pathname} = useLocation();
     const [active, setActive] = useState("");
     const navigate = useNavigate();
     const theme = useTheme();
 
     useEffect(() => {
+        if (pathname.substring(1) === "agent" && user.role !== "admin") {
+            navigate("/dashboard");
+        }
         setActive(pathname.substring(1));
         if (!isNonMobile) {
             setIsSidebarOpen(isNonMobile);
@@ -99,7 +109,7 @@ function Sidebar({drawerWidth, isNonMobile, isSidebarOpen, setIsSidebarOpen}) {
                             </FlexBetween>
                         </Box>
                         <List>
-                            {navItems.map(({text, icon, path}) => {
+                            {navItems.map(({text, icon, permission}) => {
                                 if (!icon) {
                                     return (
                                         <Typography
@@ -115,7 +125,16 @@ function Sidebar({drawerWidth, isNonMobile, isSidebarOpen, setIsSidebarOpen}) {
                                 const lcText = text.toLowerCase();
 
                                 return (
-                                    <ListItem key={text} disablePadding>
+                                    <ListItem
+                                        key={text}
+                                        disablePadding
+                                        sx={{
+                                            display: permission.includes(
+                                                user.role
+                                            )
+                                                ? "block"
+                                                : "none"
+                                        }}>
                                         <ListItemButton
                                             onClick={() => {
                                                 navigate(`/${lcText}`);

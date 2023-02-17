@@ -9,9 +9,10 @@ import {useFormik} from "formik";
 import BetTable from "component/table/BetTable";
 import SuccessBet from "component/modal/SuccessBet";
 
-// const onSubmit = (values, actions) => {};
+import {useSelector} from "react-redux";
 
 function Bet() {
+    const user = useSelector((state) => state.global.user);
     const theme = useTheme();
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
 
@@ -42,7 +43,7 @@ function Bet() {
         <Box m="1.5rem 2.5rem" pb="1.5rem">
             <FlexBetween>
                 <Header title="BET" subtitle="List of Bets" />
-                <Box>
+                <Box display={user.role === "admin" ? "none" : "block"}>
                     <Button
                         variant="contained"
                         sx={{

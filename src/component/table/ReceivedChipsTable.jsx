@@ -1,7 +1,7 @@
 import React from "react";
 import {DataGrid} from "@mui/x-data-grid";
 
-function ChipsGiven({isDashboard = false}) {
+function ReceivedChipsTable({isDashboard = false}) {
     // table columns
     const columns = [
         {
@@ -16,8 +16,8 @@ function ChipsGiven({isDashboard = false}) {
             flex: 0.5
         },
         {
-            field: "givenChips",
-            headerName: "Given Chips"
+            field: "receivedChips",
+            headerName: "Received Chips"
         },
         {
             field: "date",
@@ -34,13 +34,13 @@ function ChipsGiven({isDashboard = false}) {
                 {
                     _id: "890345acd2112",
                     agent: "John Doe",
-                    givenChips: "100",
+                    receivedChips: "100",
                     date: "February 7, 2023 8:37 PM"
                 },
                 {
                     _id: "890345acd2112123",
                     agent: "Mike Doe",
-                    givenChips: "75",
+                    receivedChips: "75",
                     date: "February 7, 2023 8:37 PM"
                 }
             ]}
@@ -49,4 +49,4 @@ function ChipsGiven({isDashboard = false}) {
     );
 }
 
-export default ChipsGiven;
+export default ReceivedChipsTable;

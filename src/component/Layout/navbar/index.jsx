@@ -4,7 +4,8 @@ import {
     DarkModeOutlined,
     Menu as MenuIcon,
     SettingsOutlined,
-    LogoutOutlined
+    LogoutOutlined,
+    PaidOutlined
 } from "@mui/icons-material";
 import FlexBetween from "component/custom/FlexBetween";
 import {useDispatch} from "react-redux";
@@ -18,11 +19,17 @@ import {
     MenuList,
     MenuItem,
     ListItemText,
-    ListItemIcon
+    ListItemIcon,
+    Box,
+    Typography
 } from "@mui/material";
 import {useNavigate} from "react-router-dom";
+import {setUser} from "state";
+import {STORAGE} from "config/constant";
+import {useSelector} from "react-redux";
 
 function Navbar({isSidebarOpen, setIsSidebarOpen}) {
+    const user = useSelector((state) => state.global.user);
     const dispatch = useDispatch();
     const theme = useTheme();
     const navigate = useNavigate();
@@ -34,6 +41,14 @@ function Navbar({isSidebarOpen, setIsSidebarOpen}) {
     const handleClose = () => setAnchorEl(null);
 
     const handleLogout = () => {
+        localStorage.removeItem(STORAGE.SESSION);
+        dispatch(
+            setUser({
+                name: "",
+                token: "",
+                role: ""
+            })
+        );
         navigate("/");
     };
 
@@ -58,6 +73,19 @@ function Navbar({isSidebarOpen, setIsSidebarOpen}) {
 
                 {/* RIGHT SIDE */}
                 <FlexBetween gap="1.5">
+                    <Box
+                        display={user.role === "agent" ? "flex" : "none"}
+                        justifyContent="center"
+                        alignItems="center"
+                        color={theme.palette.secondary[300]}>
+                        <Typography fontSize="20px">100</Typography>
+                        <PaidOutlined
+                            sx={{
+                                marginLeft: "5px",
+                                fontSize: "25px"
+                            }}
+                        />
+                    </Box>
                     <IconButton onClick={() => dispatch(setMode())}>
                         {theme.palette.mode === "dark" ? (
                             <DarkModeOutlined

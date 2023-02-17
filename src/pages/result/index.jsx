@@ -2,12 +2,14 @@ import React, {useState} from "react";
 import FlexBetween from "component/custom/FlexBetween";
 import Header from "component/custom/Header";
 import {Box, Button, useTheme, useMediaQuery, Typography} from "@mui/material";
-import {DataGrid} from "@mui/x-data-grid";
 import AddResult from "component/modal/AddResult";
 import {resultSchema} from "helper/formik";
 import {useFormik} from "formik";
+import ResultTable from "component/table/ResultTable";
+import {useSelector} from "react-redux";
 
 function Result() {
+    const user = useSelector((state) => state.global.user);
     const theme = useTheme();
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
     const isNonMobile = useMediaQuery("(min-width: 600px)");
@@ -28,49 +30,11 @@ function Result() {
     //States
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // table columns
-    const columns = [
-        {
-            field: "_id",
-            headerName: "ID",
-            flex: 0.5
-        },
-        {
-            field: "bet_id",
-            headerName: "Bet ID",
-            flex: 0.5
-        },
-        {
-            field: "bet_number",
-            headerName: "Number Picked",
-            flex: 0.5
-        },
-        {
-            field: "isRumbled",
-            headerName: "Rumble",
-            flex: 0.5
-        },
-        {
-            field: "draw_time",
-            headerName: "Draw",
-            flex: 0.5
-        },
-        {
-            field: "username",
-            headerName: "Username",
-            flex: 0.5
-        },
-        {
-            field: "date",
-            headerName: "Date",
-            flex: 0.5
-        }
-    ];
     return (
         <Box m="1.5rem 2.5rem" pb="1.5rem">
             <FlexBetween>
                 <Header title="Result" subtitle="List of Results" />
-                <Box>
+                <Box display={user.role === "admin" ? "block" : "none"}>
                     <Button
                         variant="contained"
                         sx={{
@@ -78,7 +42,7 @@ function Result() {
                             color: theme.palette.background.alt,
                             fontSize: "14px",
                             fontWeight: "bold",
-                            padding: "10px 20px"
+                            padding: "5px 10px"
                         }}
                         onClick={() => setIsModalOpen(true)}>
                         {" "}
@@ -104,6 +68,7 @@ function Result() {
                 }}>
                 {/* ROW 1 */}
                 <Box
+                    display={user.role === "admin" ? "block" : "none"}
                     gridColumn="span 5"
                     gridRow="span 1"
                     backgroundColor={theme.palette.background.alt}
@@ -131,6 +96,7 @@ function Result() {
                     </Box>
                 </Box>
                 <Box
+                    display={user.role === "admin" ? "block" : "none"}
                     gridColumn="span 7"
                     gridRow="span 1"
                     backgroundColor={theme.palette.background.alt}
@@ -141,23 +107,13 @@ function Result() {
                     gridRow="span 3"
                     backgroundColor={theme.palette.background.alt}
                     p="1rem"
-                    borderRadius="0.55rem">
-                    <DataGrid
-                        loading={false}
-                        getRowId={(row) => row._id}
-                        rows={[
-                            {
-                                _id: "123123123",
-                                bet_id: "567123d",
-                                bet_number: "123",
-                                isRumbled: true,
-                                draw_time: "9pm",
-                                username: "john123",
-                                date: "February 7, 2023"
-                            }
-                        ]}
-                        columns={columns}
-                    />
+                    borderRadius="0.55rem"
+                    sx={{
+                        "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                            color: `${theme.palette.secondary[200]} !important`
+                        }
+                    }}>
+                    <ResultTable />
                 </Box>
             </Box>
         </Box>

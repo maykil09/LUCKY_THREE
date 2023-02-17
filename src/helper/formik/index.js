@@ -30,3 +30,8 @@ export const numberPickedSchema = yup.object().shape({
             (val) => val.toString().length === 3
         )
 });
+
+export const loginSchema = yup.object().shape({
+    username: yup.string().required("username is required"),
+    password: yup.string().required("password is required")
+});
